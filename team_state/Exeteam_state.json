@@ -1,0 +1,124 @@
+{
+  "type": "TeamState",
+  "version": "1.0.0",
+  "agent_states": {
+    "DSLExecutor": {
+      "type": "ChatAgentContainerState",
+      "version": "1.0.0",
+      "agent_state": {
+        "type": "BaseState",
+        "version": "1.0.0"
+      },
+      "message_buffer": []
+    },
+    "DSLModifier": {
+      "type": "ChatAgentContainerState",
+      "version": "1.0.0",
+      "agent_state": {
+        "type": "BaseState",
+        "version": "1.0.0"
+      },
+      "message_buffer": [
+        {
+          "id": "b84b3883-044b-44fa-8e55-5f1039295f67",
+          "source": "user",
+          "models_usage": null,
+          "metadata": {},
+          "created_at": "2025-08-26 06:48:14.189620+00:00",
+          "content": "{\n  \"size\": 0,\n  \"query\": {\n    \"bool\": {\n      \"filter\": [\n        {\n          \"range\": {\n            \"@timestamp\": {\n              \"gte\": \"2025-08-19T00:00:00\",\n              \"lte\": \"2025-08-26T23:59:59\",\n              \"format\": \"yyyy-MM-dd'T'HH:mm:ss\"\n            }\n          }\n        }\n      ]\n    }\n  },\n  \"aggs\": {\n    \"by_10_minutes\": {\n      \"date_histogram\": {\n        \"field\": \"@timestamp\",\n        \"fixed_interval\": \"10m\",\n        \"time_zone\": \"Asia/Hong_Kong\"\n      },\n      \"aggs\": {\n        \"max_tx_bytes\": {\n          \"max\": {\n            \"field\": \"SSIDTable.TxDataBytes\"\n          }\n        },\n        \"max_rx_bytes\": {\n          \"max\": {\n            \"field\": \"SSIDTable.RxDataBytes\"\n          }\n        },\n        \"upload_speed_bits_per_second\": {\n          \"bucket_script\": {\n            \"buckets_path\": {\n              \"max_tx_bytes\": \"max_tx_bytes\"\n            },\n            \"script\": \"(params.max_tx_bytes * 8) / 600\"\n          }\n        },\n        \"download_speed_bits_per_second\": {\n          \"bucket_script\": {\n            \"buckets_path\": {\n              \"max_rx_bytes\": \"max_rx_bytes\"\n            },\n            \"script\": \"(params.max_rx_bytes * 8) / 600\"\n          }\n        },\n        \"upload_speed_diff\": {\n          \"serial_diff\": {\n            \"buckets_path\": \"upload_speed_bits_per_second\"\n          }\n        },\n        \"download_speed_diff\": {\n          \"serial_diff\": {\n            \"buckets_path\": \"download_speed_bits_per_second\"\n          }\n        }\n      }\n    }\n  }\n}",
+          "type": "TextMessage"
+        },
+        {
+          "id": "8726ca88-3750-4a52-8426-9f05f4f1f90e",
+          "source": "DSLExecutor",
+          "models_usage": {
+            "prompt_tokens": 1108,
+            "completion_tokens": 27
+          },
+          "metadata": {},
+          "created_at": "2025-08-26 06:48:21.422139+00:00",
+          "content": "```json\nC:\\Users\\Henry\\Desktop\\Agentic AI\\zip\\result\\result.json\n```\n\nTASK COMPLETE",
+          "type": "TextMessage"
+        }
+      ]
+    },
+    "RoundRobinGroupChatManager": {
+      "type": "RoundRobinManagerState",
+      "version": "1.0.0",
+      "message_thread": [
+        {
+          "id": "b84b3883-044b-44fa-8e55-5f1039295f67",
+          "source": "user",
+          "models_usage": null,
+          "metadata": {},
+          "created_at": "2025-08-26 06:48:14.189620+00:00",
+          "content": "{\n  \"size\": 0,\n  \"query\": {\n    \"bool\": {\n      \"filter\": [\n        {\n          \"range\": {\n            \"@timestamp\": {\n              \"gte\": \"2025-08-19T00:00:00\",\n              \"lte\": \"2025-08-26T23:59:59\",\n              \"format\": \"yyyy-MM-dd'T'HH:mm:ss\"\n            }\n          }\n        }\n      ]\n    }\n  },\n  \"aggs\": {\n    \"by_10_minutes\": {\n      \"date_histogram\": {\n        \"field\": \"@timestamp\",\n        \"fixed_interval\": \"10m\",\n        \"time_zone\": \"Asia/Hong_Kong\"\n      },\n      \"aggs\": {\n        \"max_tx_bytes\": {\n          \"max\": {\n            \"field\": \"SSIDTable.TxDataBytes\"\n          }\n        },\n        \"max_rx_bytes\": {\n          \"max\": {\n            \"field\": \"SSIDTable.RxDataBytes\"\n          }\n        },\n        \"upload_speed_bits_per_second\": {\n          \"bucket_script\": {\n            \"buckets_path\": {\n              \"max_tx_bytes\": \"max_tx_bytes\"\n            },\n            \"script\": \"(params.max_tx_bytes * 8) / 600\"\n          }\n        },\n        \"download_speed_bits_per_second\": {\n          \"bucket_script\": {\n            \"buckets_path\": {\n              \"max_rx_bytes\": \"max_rx_bytes\"\n            },\n            \"script\": \"(params.max_rx_bytes * 8) / 600\"\n          }\n        },\n        \"upload_speed_diff\": {\n          \"serial_diff\": {\n            \"buckets_path\": \"upload_speed_bits_per_second\"\n          }\n        },\n        \"download_speed_diff\": {\n          \"serial_diff\": {\n            \"buckets_path\": \"download_speed_bits_per_second\"\n          }\n        }\n      }\n    }\n  }\n}",
+          "type": "TextMessage"
+        },
+        {
+          "id": "6f68256a-7e63-4959-91bd-a8ffcac89d33",
+          "source": "DSLExecutor",
+          "models_usage": null,
+          "metadata": {},
+          "created_at": "2025-08-26 06:48:14.191049+00:00",
+          "content": [
+            {
+              "content": "BEA",
+              "mime_type": "text/plain",
+              "metadata": null
+            }
+          ],
+          "type": "MemoryQueryEvent"
+        },
+        {
+          "id": "0dd08362-4a41-46ee-923a-9d9754ec27a4",
+          "source": "DSLExecutor",
+          "models_usage": {
+            "prompt_tokens": 652,
+            "completion_tokens": 490
+          },
+          "metadata": {},
+          "created_at": "2025-08-26 06:48:20.059127+00:00",
+          "content": [
+            {
+              "id": "call_4YQaytwEsc6vcEsAutrosCF2",
+              "arguments": "{\"index_name\":\"BEA\",\"query_str\":\"{\\n  \\\"size\\\": 0,\\n  \\\"query\\\": {\\n    \\\"bool\\\": {\\n      \\\"filter\\\": [\\n        {\\n          \\\"range\\\": {\\n            \\\"@timestamp\\\": {\\n              \\\"gte\\\": \\\"2025-08-19T00:00:00\\\",\\n              \\\"lte\\\": \\\"2025-08-26T23:59:59\\\",\\n              \\\"format\\\": \\\"yyyy-MM-dd'T'HH:mm:ss\\\"\\n            }\\n          }\\n        }\\n      ]\\n    }\\n  },\\n  \\\"aggs\\\": {\\n    \\\"by_10_minutes\\\": {\\n      \\\"date_histogram\\\": {\\n        \\\"field\\\": \\\"@timestamp\\\",\\n        \\\"fixed_interval\\\": \\\"10m\\\",\\n        \\\"time_zone\\\": \\\"Asia/Hong_Kong\\\"\\n      },\\n      \\\"aggs\\\": {\\n        \\\"max_tx_bytes\\\": {\\n          \\\"max\\\": {\\n            \\\"field\\\": \\\"SSIDTable.TxDataBytes\\\"\\n          }\\n        },\\n        \\\"max_rx_bytes\\\": {\\n          \\\"max\\\": {\\n            \\\"field\\\": \\\"SSIDTable.RxDataBytes\\\"\\n          }\\n        },\\n        \\\"upload_speed_bits_per_second\\\": {\\n          \\\"bucket_script\\\": {\\n            \\\"buckets_path\\\": {\\n              \\\"max_tx_bytes\\\": \\\"max_tx_bytes\\\"\\n            },\\n            \\\"script\\\": \\\"(params.max_tx_bytes * 8) / 600\\\"\\n          }\\n        },\\n        \\\"download_speed_bits_per_second\\\": {\\n          \\\"bucket_script\\\": {\\n            \\\"buckets_path\\\": {\\n              \\\"max_rx_bytes\\\": \\\"max_rx_bytes\\\"\\n            },\\n            \\\"script\\\": \\\"(params.max_rx_bytes * 8) / 600\\\"\\n          }\\n        },\\n        \\\"upload_speed_diff\\\": {\\n          \\\"serial_diff\\\": {\\n            \\\"buckets_path\\\": \\\"upload_speed_bits_per_second\\\"\\n          }\\n        },\\n        \\\"download_speed_diff\\\": {\\n          \\\"serial_diff\\\": {\\n            \\\"buckets_path\\\": \\\"download_speed_bits_per_second\\\"\\n          }\\n        }\\n      }\\n    }\\n  }\\n}\"}",
+              "name": "Opendistro_search"
+            }
+          ],
+          "type": "ToolCallRequestEvent"
+        },
+        {
+          "id": "883ccc0a-89ac-4386-91f1-54e56a34c048",
+          "source": "DSLExecutor",
+          "models_usage": null,
+          "metadata": {},
+          "created_at": "2025-08-26 06:48:20.788690+00:00",
+          "content": [
+            {
+              "content": "Query result saved to C:\\Users\\Henry\\Desktop\\Agentic AI\\zip\\result\\result.json",
+              "name": "Opendistro_search",
+              "call_id": "call_4YQaytwEsc6vcEsAutrosCF2",
+              "is_error": false
+            }
+          ],
+          "type": "ToolCallExecutionEvent"
+        },
+        {
+          "id": "8726ca88-3750-4a52-8426-9f05f4f1f90e",
+          "source": "DSLExecutor",
+          "models_usage": {
+            "prompt_tokens": 1108,
+            "completion_tokens": 27
+          },
+          "metadata": {},
+          "created_at": "2025-08-26 06:48:21.422139+00:00",
+          "content": "```json\nC:\\Users\\Henry\\Desktop\\Agentic AI\\zip\\result\\result.json\n```\n\nTASK COMPLETE",
+          "type": "TextMessage"
+        }
+      ],
+      "current_turn": 0,
+      "next_speaker_index": 1
+    }
+  }
+}

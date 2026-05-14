@@ -1,0 +1,19 @@
+{
+  "type": "AssistantAgentState",
+  "version": "1.0.0",
+  "llm_context": {
+    "messages": [
+      {
+        "content": "{\n  \"size\": 0,\n  \"query\": {\n    \"bool\": {\n      \"filter\": [\n        {\n          \"term\": {\n            \"customer.keyword\": \"BEA\"\n          }\n        },\n        {\n          \"range\": {\n            \"@timestamp\": {\n              \"gte\": \"2025-08-19T00:00:00+08:00\",\n              \"lte\": \"2025-08-26T23:59:59+08:00\",\n              \"format\": \"strict_date_optional_time\"\n            }\n          }\n        }\n      ]\n    }\n  },\n  \"aggs\": {\n    \"group_by_AP_Name\": {\n      \"terms\": {\n        \"field\": \"WirelessTable.AP_Name.keyword\"\n      },\n      \"aggs\": {\n        \"group_by_timestamp\": {\n          \"date_histogram\": {\n            \"field\": \"@timestamp\",\n            \"fixed_interval\": \"10m\",\n            \"time_zone\": \"Asia/Hong_Kong\"\n          },\n          \"aggs\": {\n            \"upload_speed_bps\": {\n              \"max\": {\n                \"field\": \"SSIDTable.TxDataBytes\"\n              }\n            },\n            \"upload_speed_bps_diff\": {\n              \"serial_diff\": {\n                \"buckets_path\": \"upload_speed_bps\"\n              }\n            },\n            \"upload_speed_bps_final\": {\n              \"bucket_script\": {\n                \"buckets_path\": {\n                  \"diff\": \"upload_speed_bps_diff\"\n                },\n                \"script\": \"params.diff * 8 / (10 * 60)\"\n              }\n            },\n            \"download_speed_bps\": {\n              \"max\": {\n                \"field\": \"SSIDTable.RxDataBytes\"\n              }\n            },\n            \"download_speed_bps_diff\": {\n              \"serial_diff\": {\n                \"buckets_path\": \"download_speed_bps\"\n              }\n            },\n            \"download_speed_bps_final\": {\n              \"bucket_script\": {\n                \"buckets_path\": {\n                  \"diff\": \"download_speed_bps_diff\"\n                },\n                \"script\": \"params.diff * 8 / (10 * 60)\"\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}",
+        "source": "user",
+        "type": "UserMessage"
+      },
+      {
+        "content": "```json\n{\n    \"title\": \"Analyze upload and download speeds per AP every 10 minutes for BEA customer within a specific date range.\",\n    \"logic\": \"The query filters data for a specific customer ('BEA') and a date range, then groups data by access point (AP) and timestamps in 10-minute intervals. It calculates maximum upload and download speeds, their differences over time, and final speeds in bits per second using bucket scripts.\",\n    \"content\": {\n        \"summary\": \"Analyzing upload and download speeds for wireless access points (APs) over time.\",\n        \"metrics\": [\n            \"max upload speed (SSIDTable.TxDataBytes)\",\n            \"max download speed (SSIDTable.RxDataBytes)\",\n            \"serial difference of upload speed\",\n            \"serial difference of download speed\",\n            \"final upload speed in bps\",\n            \"final download speed in bps\"\n        ],\n        \"filters\": [\n            \"customer.keyword = 'BEA'\",\n            \"@timestamp between '2025-08-19T00:00:00+08:00' and '2025-08-26T23:59:59+08:00'\"\n        ],\n        \"groupings\": [\n            \"WirelessTable.AP_Name.keyword\",\n            \"@timestamp (10-minute intervals)\"\n        ],\n        \"time_granularity\": [\"10 minutes\"],\n        \"methodology\": [\n            \"serial_diff to calculate differences in speeds over time\",\n            \"bucket_script to compute final speeds in bits per second\"\n        ]\n    }\n}\n```",
+        "thought": null,
+        "source": "ReportSaver",
+        "type": "AssistantMessage"
+      }
+    ]
+  }
+}
